@@ -3,7 +3,6 @@ import random
 from fetchers.youtube_fetcher import search_youtube_short_videos
 from downloaders.downloader import download_with_ytdlp
 from editor import compose_short
-from titlegen import generate_title
 from uploader import upload_video
 
 from config import MIN_CLIPS, MAX_CLIPS
