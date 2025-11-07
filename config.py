@@ -14,7 +14,7 @@ MAX_TOTAL_DURATION = 58  # seconds for YouTube Shorts safety
 
 # API keys - load from environment or .env
 
-YOUTUBE_CLIENT_SECRETS_FILE = "client_secret.json"  # path to client_secrets.json
+YOUTUBE_CLIENT_SECRETS_FILE = os.getenv("YOUTUBE_CLIENT_SECRETS_FILE")  # path to client_secrets.json
 YOUTUBE_REFRESH_TOKEN = os.getenv("YOUTUBE_REFRESH_TOKEN")  # optional if using OAuth flow
 
 TIKTOK_COOKIE = os.getenv("TIKTOK_COOKIE")  # if needed by TikTokApi
