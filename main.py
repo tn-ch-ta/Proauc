@@ -62,15 +62,19 @@ def main():
 
     # 5️⃣ Upload to YouTube
     print("📤 Uploading to YouTube...")
-    response = upload_video(
-        file_path=output_path,
-        title=title,
-        description="Compilation of trending funny viral shorts.",
-        tags=["shorts", "funny", "viral", "compilation", "trending"],
-        privacy="public"
-    )
-    print("✅ Upload completed.")
-    print("Response:", response)
+
+    try:
+        response = upload_video(
+            file_path=output_path,
+            title=title,
+            description="Compilation of trending funny and viral shorts automatically created by the bot.",
+            tags=["shorts", "funny", "viral", "compilation", "trending"],
+            privacy="public"
+        )
+        print("✅ Upload completed successfully!")
+        print(f"🎬 Video URL: https://www.youtube.com/watch?v={response.get('id', 'UNKNOWN')}")
+    except Exception as e:
+        print(f"❌ Upload failed: {e}")
 
 if __name__ == "__main__":
     main()
