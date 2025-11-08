@@ -4,16 +4,13 @@ from datetime import datetime, timedelta, timezone
 from config import YOUTUBE_CLIENT_SECRETS_FILE
 import os
 import re
+import random
 
 YOUTUBE_API_KEY = os.getenv("YOUTUBE_API_KEY")
 
 def parse_iso_duration(duration_str):
-    """
-    Convert ISO 8601 duration (e.g., PT45S, PT1M2S) to seconds.
-    """
-    match = re.match(
-        r"PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?", duration_str
-    )
+    """Convert ISO 8601 duration (e.g., PT45S, PT1M2S) to seconds."""
+    match = re.match(r"PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?", duration_str)
     if not match:
         return 0
     hours = int(match.group(1)) if match.group(1) else 0
@@ -26,12 +23,13 @@ def search_youtube_short_videos(
     max_results=50,
     max_total_duration=58,
     min_clips=4,
-    max_clips=8
+    max_clips=8,
+    min_likes=7000
 ):
     """
     Search for recent short YouTube videos with specific tags,
-    not older than 1 month, and ensure that the total of selected clips
-    can fit within 58 seconds without trimming.
+    not older than 1 month, and ensure total selected clips fit ≤ 58s.
+    Filters out videos with fewer than `min_likes`.
     """
     if not YOUTUBE_API_KEY:
         print("⚠️ Missing YOUTUBE_API_KEY in environment variables.")
@@ -55,14 +53,13 @@ def search_youtube_short_videos(
         maxResults=max_results
     )
     search_res = search_req.execute()
-
     video_ids = [item["id"]["videoId"] for item in search_res.get("items", [])]
 
     if not video_ids:
         print("⚠️ No search results found.")
         return []
 
-    # 2️⃣ Get full video details (including duration)
+    # 2️⃣ Get full video details (duration, stats)
     video_req = youtube.videos().list(
         part="snippet,contentDetails,statistics",
         id=",".join(video_ids)
@@ -77,12 +74,19 @@ def search_youtube_short_videos(
         duration = parse_iso_duration(vid["contentDetails"]["duration"])
         tags_in_video = vid["snippet"].get("tags", [])
         published = vid["snippet"]["publishedAt"]
+        stats = vid.get("statistics", {})
 
-        # Only include if within 1 month and tags match desired keywords
+        like_count = int(stats.get("likeCount", 0))  # Some videos may have likes hidden
+
+        # Filter out videos with too few likes
+        if like_count < min_likes:
+            continue
+
+        # Filter by duration
         if duration == 0 or duration > 58:
             continue
 
-        # only allow videos that have at least one of our keywords in their tags
+        # Filter by keyword tags
         tags_combined = ", ".join(tags_in_video).lower()
         if not any(keyword.lower() in tags_combined for keyword in tags):
             continue
@@ -93,6 +97,7 @@ def search_youtube_short_videos(
             "url": f"https://www.youtube.com/watch?v={video_id}",
             "duration": duration,
             "publishedAt": published,
+            "likeCount": like_count,
             "source": "youtube"
         })
 
@@ -115,8 +120,7 @@ def search_youtube_short_videos(
         print("⚠️ Could not find enough clips to fit under total duration limit.")
         return []
 
-    # Return one random valid set
-    import random
     chosen = random.choice(valid_sets)
     print(f"✅ Selected {len(chosen)} YouTube clips totaling {sum(v['duration'] for v in chosen)}s")
+    print(f"✅ All videos have ≥ {min_likes} likes.")
     return chosen
