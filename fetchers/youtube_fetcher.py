@@ -6,7 +6,7 @@ import os
 import re
 import random
 
-YOUTUBE_API_KEY = os.getenv("YOUTUBE_API_KEY")
+YOUTUBE_API_KEY = "AIzaSyBvEWRgKYX2JUZROeg5mVQPoaQ-f2il7t8"
 
 def parse_iso_duration(duration_str):
     """Convert ISO 8601 duration (e.g., PT45S, PT1M2S) to seconds."""
