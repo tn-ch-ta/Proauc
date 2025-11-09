@@ -7,7 +7,7 @@ from googleapiclient.discovery import build
 from datetime import datetime, timedelta, timezone
 
 # === CONFIG ===
-YOUTUBE_API_KEY = os.getenv("YOUTUBE_API_KEY")
+YOUTUBE_API_KEY = "AIzaSyBvEWRgKYX2JUZROeg5mVQPoaQ-f2il7t8"
 SEEN_VIDEOS_FILE = "data/seen_videos.json"  # store previously used videos
 
 # === HELPERS ===
@@ -44,15 +44,15 @@ def save_seen_videos(video_ids):
 def search_youtube_short_videos(
     tags=("rdr2", "reddeadredemption2", "rdro"),
     max_results=50,
-    max_total_duration=58,
+    max_total_duration=61,
     min_likes=1000,
-    max_clips=5
+    max_clips=3
 ):
     """
     Search for RDR2-related short YouTube videos with:
     - Minimum 1000 likes
     - Published AT LEAST 60 days ago
-    - Duration ≤ 58s
+    - Duration ≤ 61s
     - Maximum of 5 clips returned
     - Skips any previously used videos
     """
