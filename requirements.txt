@@ -4,13 +4,13 @@ pandas>=2.3.0
 requests>=2.31.0
 
 # === Video Processing ===
-moviepy>=2.2.1
+moviepy>=1.0.3
 imageio>=2.34.0
 imageio-ffmpeg>=0.5.1
 opencv-python>=4.10.0
 
 # === Audio + Speech ===
-whisper @ git+https://github.com/openai/whisper.git
+git+https://github.com/openai/whisper.git
 ffmpeg-python>=0.2.0
 pydub>=0.25.1
 
@@ -29,6 +29,7 @@ google-auth-oauthlib>=1.2.0
 google-auth-httplib2>=0.2.0
 httplib2>=0.22.0
 
-# === Optional Quality-of-Life Tools ===
+# === Quality-of-Life Tools ===
+yt-dlp
 tqdm>=4.66.5
 rich>=13.8.0
