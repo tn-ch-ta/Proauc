@@ -5,7 +5,7 @@ from downloaders.downloader import download_with_ytdlp
 from editor import compose_short
 from uploader import upload_video
 
-from config import MIN_CLIPS, MAX_CLIPS
+from config import MAX_CLIPS
 
 def main():
     print("🔍 Searching YouTube for trending funny/viral shorts...")
@@ -14,7 +14,6 @@ def main():
         tags=("rdr2", "reddeadredemption2", "rdro"),
         max_results=50,
         max_total_duration=58,
-        min_clips=MIN_CLIPS,
         max_clips=MAX_CLIPS,
     )
 
