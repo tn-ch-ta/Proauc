@@ -7,7 +7,7 @@ from googleapiclient.discovery import build
 from datetime import datetime, timedelta, timezone
 
 # === CONFIG ===
-YOUTUBE_API_KEY = "AIzaSyBvEWRgKYX2JUZROeg5mVQPoaQ-f2il7t8"
+YOUTUBE_API_KEY = os.getenv("YOUTUBE_API_KEY")
 SEEN_VIDEOS_FILE = "data/seen_videos.json"  # store previously used videos
 
 # === HELPERS ===
